@@ -1,0 +1,6 @@
+Démarré par l'utilisateur anonymous
+Found mavenVersion 2.2.1 from file jar:file:/usr/local/maven/2.2.1/lib/maven-2.2.1-uber.jar!/META-INF/maven/org.apache.maven/maven-core/pom.properties
+Parsing POMs
+ERROR: No such file /Developer/Projects/maven-scheduler/work/jobs/Test/workspace/pom.xml
+Perhaps you need to specify the correct POM file path in the project configuration?
+[8mha:AAAAWB+LCAAAAAAAAABb85aBtbiIQSmjNKU4P08vOT+vOD8nVc8DzHWtSE4tKMnMz/PLL0ldFVf2c+b/lb5MDAwVRQxSaBqcITRIIQMEMIIUFgAAckCEiWAAAAA=[0mFinished: FAILURE

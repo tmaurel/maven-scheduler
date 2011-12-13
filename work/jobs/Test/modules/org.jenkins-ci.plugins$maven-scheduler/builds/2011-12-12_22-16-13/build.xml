@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson.maven.MavenBuild>
+  <actions/>
+  <number>5</number>
+  <result>NOT_BUILT</result>
+  <duration>2</duration>
+  <charset>UTF-8</charset>
+  <keepLog>false</keepLog>
+  <workspace>/Developer/Projects/maven-scheduler/work/jobs/Test/workspace</workspace>
+  <builtOn></builtOn>
+</hudson.maven.MavenBuild>

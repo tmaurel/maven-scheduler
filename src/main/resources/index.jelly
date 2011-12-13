@@ -1,0 +1,7 @@
+<!--
+  This view is used to render the installed plugins page.
+-->
+<div>
+  This plugin provides a way to schedule multiple maven executions with different goals and options
+    based on CRON expressions.
+</div>
