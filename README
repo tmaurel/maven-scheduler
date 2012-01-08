@@ -1,1 +1,2 @@
-This file was created by IntelliJ IDEA 10.5.4 for binding GitHub repository
+This Jenkins-CI plugin provides a way to schedule multiple maven executions with different goals and options
+    based on CRON expressions.
