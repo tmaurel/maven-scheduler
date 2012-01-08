@@ -10,6 +10,7 @@
 
     <groupId>org.jenkins-ci.plugins</groupId>
     <artifactId>maven-scheduler</artifactId>
+    <name>MavenSchedulerPlugin</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>hpi</packaging>
 

@@ -9,12 +9,10 @@ import hudson.model.AbstractProject;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildWrapper;
 import hudson.tasks.BuildWrapperDescriptor;
-import hudson.util.FormValidation;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.kohsuke.stapler.Ancestor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.IOException;
@@ -31,8 +29,14 @@ public class SchedulerBuildWrapper extends BuildWrapper {
 
     private static final Logger LOGGER = Logger.getLogger(SchedulerBuildWrapper.class.getName());
 
+    /**
+     * The list of triggers
+     */
     private final List<ScheduledMavenExecution> executions;
 
+    /**
+     * Parent project
+     */
     private final AbstractProject parent;
 
     public SchedulerBuildWrapper(AbstractProject parent, List<ScheduledMavenExecution> commands) {
@@ -70,20 +74,29 @@ public class SchedulerBuildWrapper extends BuildWrapper {
             }
         }
 
+        // if this is one of our triggered build
         if (isScheduledBuild && isMavenProject(this.parent)) {
             mvnProject = (MavenModuleSet) this.parent;
             currentGoals = mvnProject.getGoals();
             // changes goals to use
             mvnProject.setGoals(scheduledCause.getGoals());
+        } else {
+            // if this is not one of our triggered build
+            // let next triggers know a standard build appended
+            for (ScheduledMavenExecution execution : this.executions) {
+                execution.setHasBeenRebuilt(true);
+            }
         }
-        return buildEnvironnement(mvnProject, currentGoals);
+
+        return buildEnvironment(mvnProject, currentGoals);
     }
 
-    private Environment buildEnvironnement(final MavenModuleSet project, final String goals) {
+    private Environment buildEnvironment(final MavenModuleSet project, final String goals) {
         return new Environment() {
             @Override
             public boolean tearDown(AbstractBuild build, BuildListener listener) throws IOException, InterruptedException {
-                if (project != null && StringUtils.isNotBlank(goals)) {
+                if ((project != null) && StringUtils.isNotBlank(goals)) {
+                    // change goals back to default ones
                     project.setGoals(goals);
                 }
                 return true;
@@ -94,6 +107,9 @@ public class SchedulerBuildWrapper extends BuildWrapper {
     @Extension
     public static class DescriptorImpl extends BuildWrapperDescriptor {
 
+        /**
+         * Global boolean to disable every triggers
+         */
         private boolean isDisabled;
 
         @Override
@@ -124,7 +140,7 @@ public class SchedulerBuildWrapper extends BuildWrapper {
                 Object object = ancestor.getObject();
                 if (SchedulerBuildWrapper.isMavenProject(object)) {
                     return new SchedulerBuildWrapper((AbstractProject) object,
-                            req.bindParametersToList(ScheduledMavenExecution.class, "scheduled-execution."));
+                            req.bindJSONToList(ScheduledMavenExecution.class, formData.get("execution")));
                 }
             }
             return null;
